@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="renderer" content="webkit">
+		<title></title>
+		<link rel="stylesheet" href="../css/pintuer.css">
+		<link rel="stylesheet" href="../css/admin.css">
+		<link rel="stylesheet" href="../css/bootstrap.css">
+		<script src="../js/jquery.js"></script>
+		<script src="../js/pintuer.js"></script>
+		<script src="../js/acm-mercury.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+	</head>
+
+	<body>
+		<form method="post" action="" id="listform">
+			<div class="panel admin-panel">
+				<div class="panel-head"><strong class="icon-reorder"> 内容列表</strong>
+					<a href="" style="float:right; display:none;">添加字段</a>
+				</div>
+				<div class="padding border-bottom">
+
+					<ul class="search" style="padding-left:10px;">
+						<li>
+							<a class="button border-main icon-plus-square-o" href="addRecord.html"> 添加内容</a>
+						</li>
+						<li>搜索：</li>
+						<if condition="$iscid eq 1">
+							<li>
+								<select id="changeSearchCategory" name="cid" class="input" style="width:200px; line-height:17px;" onchange="changeSearch(this);">
+									<option value="acmall.html">全部</option>
+									<option value="acmicpc.html">ACM-ICPC</option>
+									<option value="acmccpc.html">CCPC</option>
+									<option value="acmjx.html">ACM集训</option>
+									<option value="acmss.html">ACM省赛</option>
+									<option value="acmtts.html">ACM天梯赛</option>
+								</select>
+							</li>
+						</if>
+						<li>
+							<input id="searchKeywords" type="text" placeholder="请输入搜索关键字" name="searchKeywords" class="input" style="width:250px; line-height:17px;display:inline-block" />
+							<a href="javascript:void(0)" class="button border-main icon-search" onclick="searchRecord()"> 搜索</a>
+						</li>
+					
+					</ul>
+
+				</div>
+				
+				
+				<div name="acm_event_list" id="acm_event_list" class="acm_event_list">
+
+				</div>
+
+				<script>
+					window.onload = function() {
+						$.ajax({
+							url: "/acm-event/record/getAllRecord",
+							method: "GET",
+							dataType: "JSON",
+							success: function(data) {
+								var str = "";
+								str += '<table class="table table-hover text-center">' +
+									'<tr>' +
+									'<th width="100" style="text-align:left; padding-left:20px;">ID</th>' +
+									'<th width="10%">排序</th>' +
+									'<th>图片</th>' +
+									'<th>名称</th>' +
+									'<th>分类</th>' +
+									'<th>时期</th>' +
+									'<th width="10%">更新时间</th>' +
+									'<th width="310">操作</th>' +
+									'</tr>'
+								// 			 		$("#acm_event_list").empty();
+								if(data != null && data != "") {
+									for(var i = 0; i < data.length; i++) {
+										str +=
+											'<tr>' +
+											'<td style="text-align:left; padding-left:20px;"><input type="checkbox" name="id[]" value="" />' + data[i].record_id +
+											'</td>' +
+											'<td><input type="text" name="sort[1]" value="' + (i + 1) + '" style="width:50px; text-align:center; border:1px solid #ddd; padding:7px 0;" /></td>' +
+											'<td width="10%"><img src="' + data[i].record_imgurl + '" alt="" width="70" height="50" /></td>' +
+											'<td>' + data[i].record_title + '</td>' +
+											'<td>' +
+											'<font color="#00CC99">' + data[i].record_category + '</font>' +
+											'</td>' +
+											'<td>' + data[i].record_date + '</td>' +
+											'<td>' + 'N' + '</td>' +
+											'<td>' +
+											'<div class="button-group">' +
+											'<a class="button border-main" href="javascript:void(0)" data-toggle="click" data-target="#editRecod" data-mask="1" data-width="50%"><span class="icon-edit"></span> 修改</a>' +
+											'<a class="button border-red" href="javascript:void(0)" onclick="deleteRecord(' + data[i].record_id + ')"><span class="icon-trash-o"></span> 删除</a>' +
+											'</div>' +
+											'</td>' +
+											'</tr>'
+									}
+									// 			 		alert(str);     
+
+								}
+								str += '<tr>' +
+									'<td style="text-align:left; padding:19px 0;padding-left:20px;"><input type="checkbox" id="checkall" /> 全选 </td>' +
+									'<td colspan="7" style="text-align:left;padding-left:20px;">' +
+									'<a href="javascript:void(0)" class="button border-red icon-trash-o" style="padding:5px 15px;" onclick="DelSelect()"> 删除</a>' +
+									'<a href="javascript:void(0)" style="padding:5px 15px; margin:0 10px;" class="button border-blue icon-edit" onclick="sorts()"> 排序</a>' +
+									'</td></tr></table>'
+								$("#acm_event_list").html(str);
+
+							},
+							error: function(err) {
+								alert("system error");
+								console.log(err);
+							}
+						})
+					}
+				</script>
+			</div>
+		</form>
+		
+			<div id="editRecord">
+					<div class="dialog">
+						<div class="dialog-head">
+							<span class="close rotate-hover"></span><strong>对话框标题</strong>
+						</div>
+						<div class="dialog-body">
+							对话框内容</div>
+						<div class="dialog-foot">
+							<button class="button dialog-close">
+				取消</button>
+							<button class="button bg-green">
+				确认</button>
+						</div>
+					</div>
+				</div>
+		
+		
+		
+		<script type="text/javascript">
+		
+// 		$("#mercury").modal({
+			 
+// 			remote:"html/test.html";//可以填写一个url，会调用jquery load方法加载数据
+			 
+// 			backdrop:"static";//指定一个静态背景，当用户点击背景处，modal界面不会消失
+			 
+// 			keyboard:true;//当按下esc键时，modal框消失
+			 
+// 			})
+		
+			
+			//详细搜索
+			// 			function searchRecord(){
+			// 		        var obj = document.getElementById("changeSearchCategory"); 
+			// 				var record_category = obj.options[obj.options.selectedIndex].value;
+			// // 				var record_title = document.getElementById("searchKeywords");
+			// 		        $.ajax({
+			// 		        	url:"/acm-event/record/searchRecordByDetail",
+			// 		        	method:"GET"
+			// 		        	dataType:"JSON",
+			// 		        	data:{"record_category":record_category, "record_title":$("input[name='searchKeywords']").val()},
+			// 		        	success:function(data){
+
+			// 		        	}
+			// 		        })
+			// 			}
+
+	
+
+// 			//全选
+// 			$("#checkall").click(function() {
+// 				$("input[name='id[]']").each(function() {
+// 					if(this.checked) {
+// 						this.checked = false;
+// 					} else {
+// 						this.checked = true;
+// 					}
+// 				});
+// 			})
+
+// 			//批量删除
+// 			function DelSelect() {
+// 				var Checkbox = false;
+// 				$("input[name='id[]']").each(function() {
+// 					if(this.checked == true) {
+// 						Checkbox = true;
+// 					}
+// 				});
+// 				if(Checkbox) {
+// 					var t = confirm("您确认要删除选中的内容吗？");
+// 					if(t == false) return false;
+// 					$("#listform").submit();
+// 				} else {
+// 					alert("请选择您要删除的内容!");
+// 					return false;
+// 				}
+// 			}
+
+// 			//批量排序
+// 			function sorts() {
+// 				var Checkbox = false;
+// 				$("input[name='id[]']").each(function() {
+// 					if(this.checked == true) {
+// 						Checkbox = true;
+// 					}
+// 				});
+// 				if(Checkbox) {
+
+// 					$("#listform").submit();
+// 				} else {
+// 					alert("请选择要操作的内容!");
+// 					return false;
+// 				}
+// 			}
+		</script>
+	</body>
+
+</html>

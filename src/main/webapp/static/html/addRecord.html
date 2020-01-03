@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="renderer" content="webkit">
+		<title></title>
+		<link rel="stylesheet" href="../css/pintuer.css">
+		<link rel="stylesheet" href="../css/admin.css">
+		<script src="../js/jquery.js"></script>
+		<script src="../js/pintuer.js"></script>
+	</head>
+		
+	<body>
+		<div class="panel admin-panel">
+			<div class="panel-head"><strong><span class="icon-pencil-square-o"></span> 单页信息</strong></div>
+			<div class="body-content">
+				<form class="form-x" id = "add-Record" enctype="multipart/form-data" name = "add-Record">
+					<div class="form-group">
+						<div class="label">
+							<label>标题：</label>
+						</div>
+						<div class="field">
+							<input type="text" class="input" name="record_title" value="" />
+							<div class="tips"></div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="label">
+							<label for="record_category">分类:</label>
+						</div>
+						<div class="field">
+							<select class="input" name="record_category">
+								<option>ACM集训</option>
+								<option>ACM省赛</option>
+								<option>ACM-ICPC</option>
+								<option>CCPC</option>
+								<option>天梯赛</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="label">
+							<label>时间：</label>
+						</div>
+						<div class="field">
+							<input type="text" class="input" name="record_date" value="" />
+							<div class="tips"></div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="label">
+							<label>图片：</label>
+						</div>
+						<div class="field">
+<!-- 							<input type="text" id="url1" name="img" class="input tips" style="width:25%; float:left;" value="" data-toggle="hover" data-place="right" data-image="images/y.jpg" /> -->
+							<a class="button input-file bg-blue margin-left" href="javascript:void(0);" >+ 浏览文件<input size="100" type="file"  name="pictureFile" id="pictureFile" /></a>
+							<a class="button input-file bg-blue margin-left" id = "fileNAME" onclick = "showFileName()">图片名称</a>
+<!-- 							<span ></span> -->
+							<script type="text/javascript">
+							function showFileName(){
+							    
+							    //jquery获取input file文件名
+							    var file = $("#pictureFile").val();
+							    var fileName = getFileName(file);
+							    function getFileName(o){
+							        var pos=o.lastIndexOf("\\");
+							        return o.substring(pos+1);  
+							    }
+							    $("#fileNAME").html(fileName);
+							}
+							</script>
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+						<div class="label">
+							<label>内容：</label>
+						</div>
+						<div class="field">
+							<textarea name="record_desc"></textarea>
+							<div class="tips"></div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="label">
+							<label></label>
+						</div>
+						<div class="field">
+							<button class="button bg-main icon-check-square-o" type="button" onclick = "addRecord()">提交</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<script >
+	/**create Record***/
+	function addRecord() {
+		var form = document.getElementById("add-Record");
+ 		var formData = new FormData(form)
+		$.ajax({
+		url: "/acm-event/record/addRecord",
+		data:formData,
+		async: false,  
+        cache: false,  
+        contentType: false,  
+        processData: false, 
+// 		{
+// 				"uu":$('#add-record').serialize()
+// // 				"record_title":$("input[name='record_title']").val(),
+// // 				"record_date":$("input[name='record_date']").val()
+// 		},
+		type: "POST",
+		dataType: "JSON",
+		success: function(data) {
+			if(data == 'OK'){
+            		alert("update success");
+            		window.location.reload();
+            	}
+			else {
+				alert("update fail");
+			}
+
+			},
+		error: function(err) {
+			alert("update error")
+			console.log(err, "出错了");
+		}
+	});
+
+}
+	</script>
+		
+		
+	</body>
+
+</html>
