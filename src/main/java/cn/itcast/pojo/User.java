@@ -1,15 +1,16 @@
 package cn.itcast.pojo;
 
+import org.bson.types.ObjectId;
 
 public class User {
-	private String _id;
+	private ObjectId _id;
 	private String userName;
 	private String password;
 	private String email; 
-	public String get_id() {
+	public ObjectId get_id() {
 		return _id;
 	}
-	public void set_id(String _id) {
+	public void set_id(ObjectId _id) {
 		this._id = _id;
 	}
 	public String getUserName() {

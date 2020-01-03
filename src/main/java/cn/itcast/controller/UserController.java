@@ -10,9 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 
 import cn.itcast.pojo.User;
 import cn.itcast.service.UserService;
@@ -25,13 +23,9 @@ public class UserController {
 	@Autowired
     private MongoTemplate mt; 
 	@RequestMapping("/login")
-	public String login() {
-		System.out.println("@");
-		DBCollection db = mt.getCollection("user"); 
-		DBObject dbObject = new BasicDBObject();
-		dbObject.put("_id","1");
-		mt.getCollection("user").save(dbObject);
-        System.out.println("!");
+	public String login(@RequestBody User u) {
+		User user = userServiceImpl.loginUser(u);
+		System.out.println(user.get_id());
         return "index";
 	}
 	
@@ -43,10 +37,5 @@ public class UserController {
 	@RequestMapping("/updateUser")
 	public void updateUser(@RequestBody User u) {
 		userServiceImpl.updateUser(u);
-	}
-	
-	@RequestMapping("/Admin")
-	public String Admin() {
-		return "adminIndex";
 	}
 }
