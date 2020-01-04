@@ -14,17 +14,7 @@ public class IndexController {
 	@Autowired
 	private AvgPvService pvService;
 
-	@RequestMapping("/index")
-	public String showIndex() {
-		return "index";
-	}
+	
 
-	@RequestMapping(value = "/avgPvNum", produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String getChart() {
-		System.out.println("获取平均pv数据..");
-		String data = pvService.getAvgPvNumByDates("2013-09-18", "2013-09-24");
-		return data;
-	}
 
 }

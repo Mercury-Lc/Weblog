@@ -104,9 +104,43 @@
 	      	<artifactId>spring-data-mongodb</artifactId>
 	      	<version>1.8.2.RELEASE</version>
       	</dependency>
-      	
+      	<!-- Neo4j -->
+      	<dependency> 
+   			<groupId>org.neo4j.driver</groupId> 
+   			<artifactId>neo4j-java-driver</artifactId> 
+   			<version>1.7.2</version> 
+ 	 	</dependency>
+ 	 	
+	    <dependency>
+	    <!-- Neo4j 嵌入式开发需要的jar包 -->
+	        <groupId>org.neo4j</groupId>
+	        <artifactId>neo4j</artifactId>
+	        <version>3.3.4</version>
+	    </dependency> 
+	    <dependency>
+	    <!-- Neo4j 嵌入式开发需要的jar包 -->
+	        <groupId>org.neo4j</groupId>
+	        <artifactId>neo4j</artifactId>
+	        <version>3.3.5</version>
+	    </dependency> 
+	    <!-- 解决MongoDB封装 -->
+	    <dependency>
+		    <groupId>commons-beanutils</groupId>
+		    <artifactId>commons-beanutils</artifactId>
+		    <version>1.9.3</version>
+		</dependency>
+		
 	</dependencies>
 
+	<repositories>
+        <repository>
+            <id>neo4j</id>
+            <url>http://m2.neo4j.org/content/repositories/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<resources>
